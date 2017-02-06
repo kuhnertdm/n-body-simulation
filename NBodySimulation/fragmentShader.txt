@@ -1,0 +1,12 @@
+#version 400 core
+
+in float size_;
+
+out vec4 outColor;
+
+
+void main(){
+
+	outColor = vec4(size_,size_,size_,1);
+	
+}
