@@ -19,7 +19,7 @@ public:
 
 	CameraType camType = THIRD_PERSON;
 
-	Vector3 position = Vector3(0, 0, 1);
+	Vector3 position = Vector3(0, 0, 5);
 	Vector3 direction;
 	Vector3 right;
 	Vector3 up = Vector3(0, 1, 0);
