@@ -153,6 +153,7 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="Mat4.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="OrcTree.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>
