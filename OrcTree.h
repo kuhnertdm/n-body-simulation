@@ -8,7 +8,7 @@ public:
 
 	OrcTree() {}
 
-	OrcTree(std::vector<Object> &objects) {
+	OrcTree(std::vector<Object*> &objects) {
 		this->root = new Node(objects);
 	}
 };

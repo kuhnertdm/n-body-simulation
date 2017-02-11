@@ -1,5 +1,5 @@
 #pragma once
-
+  
 #include "Object.h"
 #include "Vector3.h"
 #include <vector>
@@ -50,14 +50,21 @@ public:
 	}
 	
 	Node(std::vector<Object*> objects) {
-		int N = 1;
-		bb.minBound = objects[0]->position;
-		bb.maxBound = objects[0]->position;
-		for (int i = 0; i < objects.size(); i++) {
-			bb.expand(BoundingBox(objects[i]->position, objects[i]->position));
+		//printf("Creating node with size %d\n", objects.size());
+		int N = 10;
+		if (objects.size() == 0) {
+			this->isLeaf = true;
+			this->objects = objects;
+			return;
 		}
-		this->bb = bb;
-		if (objects.size <= N) {
+		BoundingBox newbb= BoundingBox(objects[0]->position, objects[0]->position);
+		for (int i = 1; i < objects.size(); i++) {
+			newbb = newbb.expand(BoundingBox(objects[i]->position, objects[i]->position));
+		}
+		this->bb = newbb;
+		//printf("Boundingbox minBound at %f, %f, %f, maxBound at %f, %f, %f\n", bb.minBound.x, bb.minBound.y, bb.minBound.z, bb.maxBound.x, bb.maxBound.y, bb.maxBound.z);
+
+		if (objects.size() <= N) {
 			this->isLeaf = true;
 			this->objects = objects;
 		}

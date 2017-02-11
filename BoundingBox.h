@@ -19,15 +19,15 @@ public:
 		return this->maxBound;
 	}
 	BoundingBox expand(BoundingBox b) {
-		Vector3 minBound;
-		Vector3 maxBound;
-			minBound.x = fmin(this->minBound.x, b.minBound.x);
-			maxBound.x = fmax(this->maxBound.x, b.maxBound.x);
-			minBound.y = fmin(this->minBound.y, b.minBound.y);
-			maxBound.y = fmax(this->maxBound.y, b.maxBound.y);
-			minBound.z = fmin(this->minBound.z, b.minBound.z);
-			maxBound.z = fmax(this->maxBound.z, b.maxBound.z);
-		BoundingBox newB = BoundingBox(minBound, maxBound);
+		Vector3 newMin;
+		Vector3 newMax;
+			newMin.x = fmin(this->minBound.x, b.minBound.x);
+			newMax.x = fmax(this->maxBound.x, b.maxBound.x);
+			newMin.y = fmin(this->minBound.y, b.minBound.y);
+			newMax.y = fmax(this->maxBound.y, b.maxBound.y);
+			newMin.z = fmin(this->minBound.z, b.minBound.z);
+			newMax.z = fmax(this->maxBound.z, b.maxBound.z);
+		BoundingBox newB = BoundingBox(newMin, newMax);
 		return newB;
 	}
 };
