@@ -7,6 +7,7 @@
 #include "ShaderProgram.h"
 #include "Camera.h"
 #include "Object.h"
+#include "OrcTree.h"
 
 #define NUMBER_OF_BODIES 100
 #define USE_OPENGL 1
@@ -54,6 +55,7 @@ for (int i = 0; i < NUMBER_OF_BODIES; i++) {
 	objects.push_back(new Object(pos, size));
 }
 
+	OrcTree tree = OrcTree(objects);
 
 initBuffers(objects, pos, size);
 

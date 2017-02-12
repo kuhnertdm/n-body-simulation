@@ -148,10 +148,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="Mat4.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="OrcTree.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>
@@ -159,6 +161,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mat4.cpp" />
+    <ClCompile Include="Node.h" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Vector3.cpp" />
