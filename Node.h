@@ -7,6 +7,8 @@
 
 class Node {
 public:
+	float mass;
+	Vector3 center;
 	bool isLeaf;
 	Node *children[2][2][2];
 	std::vector<Object*> objects;
@@ -50,6 +52,8 @@ public:
 	}
 	
 	Node(std::vector<Object*> objects) {
+		this->mass = 0;
+		this->center = Vector3(0, 0, 0);
 		//printf("Creating node with size %d\n", objects.size());
 		int N = 10;
 		if (objects.size() == 0) {
@@ -58,12 +62,16 @@ public:
 			return;
 		}
 		BoundingBox newbb= BoundingBox(objects[0]->position, objects[0]->position);
-		for (int i = 1; i < objects.size(); i++) {
-			newbb = newbb.expand(BoundingBox(objects[i]->position, objects[i]->position));
+		for (int i = 0; i < objects.size(); i++) {
+			Object *ob = objects[i];
+			newbb = newbb.expand(BoundingBox(ob->position, ob->position));
+			this->mass += ob->size;
+			this->center = this->center + (ob->position * ob->size);
 		}
+		this->center = this->center * (1 / this->mass);
 		this->bb = newbb;
 		//printf("Boundingbox minBound at %f, %f, %f, maxBound at %f, %f, %f\n", bb.minBound.x, bb.minBound.y, bb.minBound.z, bb.maxBound.x, bb.maxBound.y, bb.maxBound.z);
-
+		printf("A cluster of %d points created with mass %f, centered at %f, %f, %f\n", objects.size(), this->mass, this->center.x, this->center.y, this->center.z);
 		if (objects.size() <= N) {
 			this->isLeaf = true;
 			this->objects = objects;
@@ -71,5 +79,21 @@ public:
 		else {
 			split(objects);
 		}
+	}
+
+	void updatePhysics() {
+		this->mass = 0;
+		this->center = Vector3(0, 0, 0);
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				for (int k = 0; k < 2; k++) {
+					Node *child = this->children[i][j][k];
+					child->updatePhysics();
+					this->mass += child->mass;
+					this->center = this->center + (child->center * child->mass);
+				}
+			}
+		}
+		this->center = this->center * (1 / this->mass);
 	}
 };
