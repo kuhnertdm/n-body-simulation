@@ -28,74 +28,78 @@ void initOpenGL();
 int main() {
 
 
-	float *pos = new float[NUMBER_OF_BODIES * 3];
-	float *size = new float[NUMBER_OF_BODIES];
+float *pos = new float[NUMBER_OF_BODIES * 3];
+float *size = new float[NUMBER_OF_BODIES];
 
-	std::vector<Object*> objects;
-	Camera camera;
+std::vector<Object*> objects;
+Camera camera;
 
-	createWindow();
-	initOpenGL();
-
-
-	Mat4 projectionMatrix;
-	projectionMatrix.createProjectionMatrix(70.0f, 400.0f/400.0f, 0.1f, 100.0f);
+createWindow();
+initOpenGL();
 
 
-	ShaderProgram shader;
-	shader.compileShader("vertexShader.txt", NULL, "fragmentShader.txt");
-	shader.loadMat4("ProjectionMatrix", &projectionMatrix);
+Mat4 projectionMatrix;
+projectionMatrix.createProjectionMatrix(70.0f, 400.0f / 400.0f, 0.1f, 100.0f);
 
-	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
-		Vector3 random = Vector3((float)rand()/RAND_MAX, (float)rand() / RAND_MAX, (float)rand() / RAND_MAX);
-		objects.push_back(new Object(random, (float)rand() / RAND_MAX));
+
+ShaderProgram shader;
+shader.compileShader("vertexShader.txt", NULL, "fragmentShader.txt");
+shader.loadMat4("ProjectionMatrix", &projectionMatrix);
+
+for (int i = 0; i < NUMBER_OF_BODIES; i++) {
+	Vector3 pos = Vector3((float)rand() / RAND_MAX, (float)rand() / RAND_MAX, (float)rand() / RAND_MAX);
+	float size = (float)rand() / RAND_MAX / 2.0f;
+	if ((float)rand() / RAND_MAX < 0.25) { // weight towards low mass
+		size += (float)rand() / RAND_MAX / 2.0f;
 	}
+	objects.push_back(new Object(pos, size));
+}
 
 	OrcTree tree = OrcTree(objects);
 
-	initBuffers(objects, pos, size);
+initBuffers(objects, pos, size);
 
-	glfwSetTime(0);
-	float current_time;
-	float last_time = glfwGetTime();
-	float dt;
-
-
-	while (!glfwWindowShouldClose(window)) {
-
-		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+glfwSetTime(0);
+float current_time;
+float last_time = glfwGetTime();
+float dt;
 
 
-		current_time = glfwGetTime();
-		dt = current_time - last_time;
-		last_time = current_time;
+while (!glfwWindowShouldClose(window)) {
+
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 
-		input(&camera, dt);
-		//updateObjects(objects, dt);
-		//updateBuffers(objects, pos, size);
-		
-
-		camera.update();
-		shader.loadMat4("ViewMatrix", &camera.viewMatrix);
-
-		glDrawArraysInstanced(GL_POINTS, 0, 1, NUMBER_OF_BODIES);
-
-		glfwPollEvents();
-		glfwSwapBuffers(window);
+	current_time = glfwGetTime();
+	dt = current_time - last_time;
+	last_time = current_time;
 
 
-	}
+	input(&camera, dt);
+	updateObjects(objects, dt);
+	updateBuffers(objects, pos, size);
 
 
-	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
-		delete objects[i];
-	}
+	camera.update();
+	shader.loadMat4("ViewMatrix", &camera.viewMatrix);
 
-	delete[] pos;
-	delete[] size;
+	glDrawArraysInstanced(GL_POINTS, 0, 1, NUMBER_OF_BODIES);
 
-	return 0;
+	glfwPollEvents();
+	glfwSwapBuffers(window);
+
+
+}
+
+
+for (int i = 0; i < NUMBER_OF_BODIES; i++) {
+	delete objects[i];
+}
+
+delete[] pos;
+delete[] size;
+
+return 0;
 
 
 }
@@ -103,29 +107,14 @@ int main() {
 
 void updateObjects(std::vector<Object*> objects, float dt) {
 
-
 	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
-		Vector3 force;
+		objects[i]->resetForces();
 		for (int j = 0; j < NUMBER_OF_BODIES; j++) {
 			if (i != j) {
-
-				Vector3 dir = (objects[j]->position - objects[i]->position).normalize();
-				float dist = 1 * (objects[i]->position.distance(objects[j]->position));
-
-				force += 0.05f*(dir * objects[j]->size * (1.0f / (dist*dist))) * (1 / objects[i]->size);
-
-
-				if (objects[i]->position.distance(objects[j]->position) < 0.01f) {
-					objects[i]->size += objects[j]->size;
-				}
-
+				objects[i]->updateForces(*objects[j]);
 			}
 		}
-
-		objects[i]->force = force;
-		objects[i]->velocity += objects[i]->force*dt;
-		objects[i]->position += objects[i]->velocity * dt;
-
+		objects[i]->move(dt);
 	}
 }
 
