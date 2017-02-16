@@ -167,6 +167,8 @@
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="backgroundFragmentShader.txt" />
+    <Text Include="backgroundVertexShader.txt" />
     <Text Include="fragmentShader.txt" />
     <Text Include="vertexShader.txt" />
   </ItemGroup>
