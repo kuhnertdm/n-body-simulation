@@ -12,7 +12,7 @@ public:
 		this->root = new Node(objects);
 	}
 
-	void updateForces(){
-		this->root->updateForces(0, Vector3(0,0,0));
+	void updateForceOn(Object* object){
+		this->root->updateForceOn(object);
 	}
 };

@@ -12,7 +12,8 @@ public:
 	float size;
 	Object(Vector3 position, float size);
 	void resetForces();
-	void updateForces(Object &other);
+	void updateForces(Object *other);
+	void updateForces(Vector3 position, float mass);
 	void move(float dt);
 	~Object() {};
 };

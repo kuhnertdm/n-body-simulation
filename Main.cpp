@@ -130,22 +130,16 @@ int main() {
 
 
 void updateObjects(std::vector<Object*> objects, float dt) {
-	
-/*	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
-		if (!objects[i]->isAlive) continue;
-		objects[i]->resetForces();
-		for (int j = 0; j < NUMBER_OF_BODIES; j++) {
-				if (i != j && objects[j]->isAlive) {
-					objects[i]->updateForces(*objects[j]);
-				}
+	OrcTree tree = OrcTree(objects);
+	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
+		if (objects[i]->isAlive) {
+			tree.updateForceOn(objects[i]);
 		}
 	}
-	*/
-	OrcTree *tree = new OrcTree(objects);
-	tree->updateForces();
 	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
-		if (!objects[i]->isAlive) continue;
-		objects[i]->move(dt);
+		if (objects[i]->isAlive) {
+			objects[i]->move(dt);
+		}
 	}
 }
 
