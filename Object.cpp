@@ -24,9 +24,9 @@ void Object::updateForces(Object *other) {
 
 	if (dist < CUBE_DEM) {
 		other->isAlive = false;
-		printf("Velocities before collide: %f %f\n", this->velocity.magnitude(), other->velocity.magnitude());
+		//printf("Velocities before collide: %f %f\n", this->velocity.magnitude(), other->velocity.magnitude());
 		this->velocity = (this->velocity * this->size + other->velocity * other->size) * (1.0f / (this->size + other->size));
-		printf("Velocity after collide: %f\n", this->velocity.magnitude());
+		//printf("Velocity after collide: %f\n", this->velocity.magnitude());
 		this->size += other->size;
 		other->size = 0;
 		return;

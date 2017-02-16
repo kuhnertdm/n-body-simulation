@@ -4,9 +4,9 @@
 #define G 1.0f
 #define MAX_DISTANCE 2000.0f
 #define CUBE_DEM 10.0f
-#define NUMBER_OF_BODIES 50
+#define NUMBER_OF_BODIES 1000
 #define SOFTEN 0.5f
-#define CHEAT_RATIO 0.0f
+#define CHEAT_RATIO 0.8f
 #define EPS 0.001f
 class Main
 {

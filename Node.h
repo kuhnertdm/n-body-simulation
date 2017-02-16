@@ -58,7 +58,6 @@ public:
 		this->center = Vector3(0, 0, 0);
 		this->isLeaf = true;
 		this->isEmpty = false;
-		//printf("Creating node with size %d\n", objects.size());
 		if (objects.size() == 0) {
 			this->isEmpty = true;
 			return;
@@ -72,7 +71,6 @@ public:
 		}
 		this->center = this->center * (1 / this->mass);
 		this->bb = newbb;
-		//printf("Boundingbox minBound at %f, %f, %f, maxBound at %f, %f, %f\n", bb.minBound.x, bb.minBound.y, bb.minBound.z, bb.maxBound.x, bb.maxBound.y, bb.maxBound.z);
 		if (objects.size() == 1) {
 			this->object = objects[0];
 		}
@@ -90,16 +88,12 @@ public:
 			return;
 		}
 		if (this->isLeaf) {
-			//printf("Target mass %f, this mass %f, this center %f %f %f\n", target->size, this->mass, this->center.x, this->center.y, this->center.z);
 			target->updateForces(this->object);
 			return;
 		}
 		float ratio = (this->bb.maxBound.x - this->bb.minBound.x) / 2 / (target->position.distance(this->center));
-		//printf("ratio %f\n", ratio);
 		if (ratio < CHEAT_RATIO) {
 			//Treat as one
-			//printf("Target mass %f, this mass %f, this center %f %f %f\n", target->size, this->mass, this->center.x, this->center.y, this->center.z);
-			printf("Shouldn't get here\n");
 			target->updateForces(this->center, this->mass);
 		} else {
 			//Traverse down the tree
@@ -112,7 +106,6 @@ public:
 					}
 				}
 			} else {
-				printf("Shouldn't get here\n");
 				target->updateForces(this->center, this->mass);
 			}
 		}
