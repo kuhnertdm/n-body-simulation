@@ -14,7 +14,7 @@ public:
 	std::vector<Object*> objects;
 	BoundingBox bb;
 
-	void split(std::vector<Object*> objects) {
+	void split(std::vector<Object*> &objects) {
 		float splitx = (bb.maxBound.x + bb.minBound.x) / 2;
 		float splity = (bb.maxBound.y + bb.minBound.y) / 2;
 		float splitz = (bb.maxBound.z + bb.minBound.z) / 2;
@@ -71,7 +71,7 @@ public:
 		this->center = this->center * (1 / this->mass);
 		this->bb = newbb;
 		//printf("Boundingbox minBound at %f, %f, %f, maxBound at %f, %f, %f\n", bb.minBound.x, bb.minBound.y, bb.minBound.z, bb.maxBound.x, bb.maxBound.y, bb.maxBound.z);
-		printf("A cluster of %d points created with mass %f, centered at %f, %f, %f\n", objects.size(), this->mass, this->center.x, this->center.y, this->center.z);
+		//printf("A cluster of %d points created with mass %f, centered at %f, %f, %f\n", objects.size(), this->mass, this->center.x, this->center.y, this->center.z);
 		if (objects.size() <= N) {
 			this->isLeaf = true;
 			this->objects = objects;

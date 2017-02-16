@@ -70,5 +70,11 @@
     <Text Include="fragmentShader.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="backgroundVertexShader.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="backgroundFragmentShader.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
