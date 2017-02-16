@@ -54,8 +54,6 @@ int main() {
 		objects.push_back(new Object(pos, size));
 	}
 
-	OrcTree tree = OrcTree(objects);
-
 	initBuffers(objects, pos, size);
 
 	glfwSetTime(0);
@@ -106,7 +104,7 @@ int main() {
 
 void updateObjects(std::vector<Object*> objects, float dt) {
 	
-	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
+/*	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
 		if (!objects[i]->isAlive) continue;
 		objects[i]->resetForces();
 		for (int j = 0; j < NUMBER_OF_BODIES; j++) {
@@ -115,6 +113,9 @@ void updateObjects(std::vector<Object*> objects, float dt) {
 				}
 		}
 	}
+	*/
+	OrcTree *tree = new OrcTree(objects);
+	tree->updateForces();
 	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
 		if (!objects[i]->isAlive) continue;
 		objects[i]->move(dt);
