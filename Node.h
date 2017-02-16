@@ -55,7 +55,7 @@ public:
 		this->mass = 0;
 		this->center = Vector3(0, 0, 0);
 		//printf("Creating node with size %d\n", objects.size());
-		int N = 10;
+		int N = 1;
 		if (objects.size() == 0) {
 			this->isLeaf = true;
 			this->objects = objects;
@@ -63,6 +63,7 @@ public:
 			this->center = Vector3(0, 0, 0);
 			return;
 		}
+		this->center = Vector3(0, 0, 0);
 		BoundingBox newbb= BoundingBox(objects[0]->position, objects[0]->position);
 		for (int i = 0; i < objects.size(); i++) {
 			Object *ob = objects[i];
@@ -116,6 +117,7 @@ public:
 				}
 			}
 			Object fakeObject = Object(outsidePosition, outsideMass);
+			printf("op : %f %f %f, om : %f\n", outsidePosition.x, outsidePosition.y, outsidePosition.z, outsideMass);
 			for (int i = 0; i < this->objects.size(); i++) {
 				objects[i]->updateForces(fakeObject);
 			}
