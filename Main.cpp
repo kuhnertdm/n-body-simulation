@@ -12,6 +12,7 @@
 #define USE_OPENGL 1
 
 
+bool afterImages = 0;
 GLFWwindow * window;
 GLuint VAO, VBO_positions, VBO_size;
 GLuint VAO_back, VBO_back;
@@ -63,7 +64,7 @@ int main() {
 		o->velocity = vel;
 		objects.push_back(o);
 	}
-	objects.push_back(new Object(Vector3(0, 0, 0), MAX_MASS * 500));
+	objects.push_back(new Object(Vector3(0, 0, 0), MAX_MASS * 200));
 
 	initBuffers(objects, pos, size);
 
@@ -76,7 +77,7 @@ int main() {
 
 	while (!glfwWindowShouldClose(window)) {
 
-		//glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		
 
 		current_time = glfwGetTime();
 		dt = current_time - last_time;
@@ -84,7 +85,8 @@ int main() {
 
 
 		if (keys[GLFW_KEY_T]) {
-			dt *= 8;
+			keys[GLFW_KEY_T] = false;
+			afterImages = !afterImages;
 		}
 
 
@@ -96,14 +98,19 @@ int main() {
 		camera.update();
 		shader.use();
 		shader.loadMat4("ViewMatrix", &camera.viewMatrix);
+		shader.loadInteger("afterImages", afterImages);
 
 
-		background.use();
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBindVertexArray(VAO_back);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		if (afterImages){
+			background.use();
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindVertexArray(VAO_back);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
 
-
+		else {
+			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		}
 
 		shader.use();
 		glBlendFunc(GL_ONE, GL_ZERO);
@@ -131,7 +138,7 @@ int main() {
 
 void updateObjects(std::vector<Object*> objects, float dt) {
 	
-	/*for (int i = 0; i < NUMBER_OF_BODIES; i++) {
+	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
 		if (!objects[i]->isAlive) continue;
 		objects[i]->resetForces();
 		for (int j = 0; j < NUMBER_OF_BODIES; j++) {
@@ -139,7 +146,8 @@ void updateObjects(std::vector<Object*> objects, float dt) {
 				objects[i]->updateForces(objects[j]);
 			}
 		}
-	}*/
+	}
+	/*
 	OrcTree tree = OrcTree(objects);
 	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
 		objects[i]->resetForces();
@@ -147,6 +155,7 @@ void updateObjects(std::vector<Object*> objects, float dt) {
 			tree.updateForceOn(objects[i]);
 		}
 	}
+	*/
 	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
 		if (objects[i]->isAlive) {
 			objects[i]->move(dt);

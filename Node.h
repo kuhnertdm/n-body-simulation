@@ -106,7 +106,7 @@ public:
 					}
 				}
 			} else {
-				target->updateForces(this->center, this->mass);
+				target->updateForces(this->center, this->mass/2);
 			}
 		}
 	}
