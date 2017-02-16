@@ -45,7 +45,7 @@ public:
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
 				for (int k = 0; k < 2; k++) {
-					children[i][j][k] = new Node(*values[i][j][k]);
+					this->children[i][j][k] = new Node(*values[i][j][k]);
 				}
 			}
 		}
@@ -59,6 +59,8 @@ public:
 		if (objects.size() == 0) {
 			this->isLeaf = true;
 			this->objects = objects;
+			this->mass = 0;
+			this->center = Vector3(0, 0, 0);
 			return;
 		}
 		BoundingBox newbb= BoundingBox(objects[0]->position, objects[0]->position);
@@ -71,16 +73,22 @@ public:
 		this->center = this->center * (1 / this->mass);
 		this->bb = newbb;
 		//printf("Boundingbox minBound at %f, %f, %f, maxBound at %f, %f, %f\n", bb.minBound.x, bb.minBound.y, bb.minBound.z, bb.maxBound.x, bb.maxBound.y, bb.maxBound.z);
+<<<<<<< HEAD
 		//printf("A cluster of %d points created with mass %f, centered at %f, %f, %f\n", objects.size(), this->mass, this->center.x, this->center.y, this->center.z);
+=======
+>>>>>>> 32fe56d0258bdc4f738144d3ad2fc0d1c6494203
 		if (objects.size() <= N) {
 			this->isLeaf = true;
 			this->objects = objects;
 		}
 		else {
+			this->isLeaf = false;
 			split(objects);
 		}
+		//printf("A cluster of %d points created with mass %f, centered at %f, %f, %f\n", objects.size(), this->mass, this->center.x, this->center.y, this->center.z);
 	}
 
+	/*
 	void updatePhysics() {
 		this->mass = 0;
 		this->center = Vector3(0, 0, 0);
@@ -95,5 +103,38 @@ public:
 			}
 		}
 		this->center = this->center * (1 / this->mass);
+	}
+	*/
+
+	void updateForces(float outsideMass, Vector3 outsidePosition) {
+		//printf("Updating forces at Node with mass %f\n", this->mass);
+		if (this->isLeaf) {
+			//printf("IsLeaf\n");
+			for (int i = 0; i < this->objects.size(); i++) {
+				if (!objects[i]->isAlive) continue;
+				objects[i]->resetForces();
+				for (int j = 0; j < this->objects.size(); j++) {
+					if (i != j && objects[j]->isAlive) {
+						objects[i]->updateForces(*objects[j]);
+					}
+				}
+			}
+			Object fakeObject = Object(outsidePosition, outsideMass);
+			for (int i = 0; i < this->objects.size(); i++) {
+				objects[i]->updateForces(fakeObject);
+			}
+		}
+		else {
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					for (int k = 0; k < 2; k++) {
+						Node *child = this->children[i][j][k];
+						float nextOutsideMass = this->mass + outsideMass - child->mass;
+						Vector3 nextCenter = (this->mass * this->center + outsideMass * outsidePosition - child->mass * child->center) * (1.0f / nextOutsideMass);
+						child->updateForces(nextOutsideMass, nextCenter);
+					}
+				}
+			}
+		}
 	}
 };
