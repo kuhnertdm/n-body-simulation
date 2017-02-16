@@ -64,7 +64,7 @@ int main() {
 		o->velocity = vel;
 		objects.push_back(o);
 	}
-	objects.push_back(new Object(Vector3(0, 0, 0), MAX_MASS * 200));
+	objects.push_back(new Object(Vector3(0, 0, 0), MAX_MASS));
 
 	initBuffers(objects, pos, size);
 
@@ -137,7 +137,7 @@ int main() {
 
 
 void updateObjects(std::vector<Object*> objects, float dt) {
-	
+	/*
 	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
 		if (!objects[i]->isAlive) continue;
 		objects[i]->resetForces();
@@ -147,7 +147,7 @@ void updateObjects(std::vector<Object*> objects, float dt) {
 			}
 		}
 	}
-	/*
+	*/
 	OrcTree tree = OrcTree(objects);
 	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
 		objects[i]->resetForces();
@@ -155,7 +155,7 @@ void updateObjects(std::vector<Object*> objects, float dt) {
 			tree.updateForceOn(objects[i]);
 		}
 	}
-	*/
+	
 	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
 		if (objects[i]->isAlive) {
 			objects[i]->move(dt);
