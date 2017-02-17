@@ -48,6 +48,7 @@ public:
 			for (int j = 0; j < 2; j++) {
 				for (int k = 0; k < 2; k++) {
 					this->children[i][j][k] = new Node(*values[i][j][k]);
+					free(values[i][j][k]);
 				}
 			}
 		}

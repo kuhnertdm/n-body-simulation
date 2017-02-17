@@ -6,7 +6,7 @@
 #define CUBE_DEM 10.0f
 #define NUMBER_OF_BODIES 10000
 #define SOFTEN 0.5f
-#define CHEAT_RATIO 0.8f
+#define CHEAT_RATIO 0.7f
 #define EPS 0.001f
 class Main
 {

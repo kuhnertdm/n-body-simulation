@@ -22,6 +22,7 @@ bool keys[1024];
 void initBuffers(std::vector<Object*> objects, float *pos, float *size);
 void updateBuffers(std::vector<Object*> objects, float *pos, float *size);
 void updateObjects(std::vector<Object*> objects, float dt);
+void deallocate(Node *node);
 void input(Camera* camera, float dt);
 void createWindow();
 void initOpenGL();
@@ -137,17 +138,6 @@ int main() {
 
 
 void updateObjects(std::vector<Object*> objects, float dt) {
-	/*
-	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
-		if (!objects[i]->isAlive) continue;
-		objects[i]->resetForces();
-		for (int j = 0; j < NUMBER_OF_BODIES; j++) {
-			if (i != j && objects[j]->isAlive) {
-				objects[i]->updateForces(objects[j]);
-			}
-		}
-	}
-	*/
 	OrcTree tree = OrcTree(objects);
 	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
 		objects[i]->resetForces();
@@ -155,7 +145,7 @@ void updateObjects(std::vector<Object*> objects, float dt) {
 			tree.updateForceOn(objects[i]);
 		}
 	}
-	
+	deallocate(tree.root);
 	for (int i = 0; i < NUMBER_OF_BODIES; i++) {
 		if (objects[i]->isAlive) {
 			objects[i]->move(dt);
@@ -163,6 +153,21 @@ void updateObjects(std::vector<Object*> objects, float dt) {
 	}
 }
 
+void deallocate(Node *node) {
+	if (node->isLeaf) {
+		free(node);
+	}
+	else {
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				for (int k = 0; k < 2; k++) {
+					deallocate(node->children[i][j][k]);
+				}
+			}
+		}
+		free(node);
+	}
+}
 
 void createWindow() {
 
