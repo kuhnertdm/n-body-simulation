@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "Object.h"
 #include "OrcTree.h"
+#include <Windows.h>
 
 #define USE_OPENGL 1
 
@@ -76,9 +77,12 @@ int main() {
 
 	glEnable(GL_BLEND);
 
+	int frameMod = 0;
+
 	while (!glfwWindowShouldClose(window)) {
 
-		
+		SYSTEMTIME start;
+		GetSystemTime(&start);
 
 		current_time = glfwGetTime();
 		dt = current_time - last_time;
@@ -121,6 +125,18 @@ int main() {
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
+
+		SYSTEMTIME end;
+		GetSystemTime(&end);
+		if (end.wMilliseconds - start.wMilliseconds > 0 && frameMod == 0) {
+			printf("%d\n", (1000 / (end.wMilliseconds - start.wMilliseconds)));
+		}
+
+		frameMod++;
+		if (frameMod > 10) {
+			frameMod = 0;
+		}
+		
 	}
 
 
