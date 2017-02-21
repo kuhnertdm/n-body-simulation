@@ -1,0 +1,127 @@
+<html>
+
+<head>
+  <title>N-Body Simulation via Octree Simulation</title>
+</head>
+
+<body>
+  <div align=center>
+    <h1>N-Body Simulation via Octree Simulation</h1>
+    <p>Authors: Derek Kuhnert, Xingfang Yuan, Jacob Gathof</p>
+    <hr>
+  </div>
+
+  <p><u>How to install and build</u></p>
+
+  <p>[Coming soon]</p>
+
+  <p><u>Simulation Parameters (Defined in Main.h)</u></p>
+
+  <p>NUMBER_OF_BODIES: The number of bodies in the system</p>
+  <p>CHEAT_RATIO: The value of Ɵ in the Barnes-Hut Algorithm (Explained below)</p>
+
+  <p><u>Controls</u></p>
+
+  <ul>
+  <li>W - Move camera forward</li>
+  <li>S - Move camera backward</li>
+  <li>A - Move camera to the left</li>
+  <li>D - Move camera to the right</li>
+  <li>Q - Turn camera to the left</li>
+  <li>E - Turn camera to the right</li>
+  <li>Space - Move camera up</li>
+  <li>Shift - Move camera down</li>
+  <li>T - Toggle afterimages</li>
+  </ul>
+
+  <p><u>Overview</u></p>
+
+  <p>This project presents a simulation of gravitational bodies in space, each contributing to gravitational forces on the rest of the bodies.</p>
+
+  <p>N-body simulations are a classic example of how poorly-scaling algorithms can be optimized through clever structuring and estimation of data. As the number of bodies (n) becomes large, the time needed to simulate the changing position of each body increases at a rate proportional to n2.</p>
+
+  <p><u>Algorithm Improvements</u></p>
+
+  <p>This particular implementation of the simulation improves this rate by structuring the data in a tree representing divisions of physical space. An octree is particularly useful for this purpose, as one octant of space relative to the 3D bounds of a parent node can be represented as one of the eight child nodes.</p>
+
+  <p>Structuring the data in this way allows us to store center-of-mass information for each node in the tree, and therefore, to use a high-level center-of-mass to represent the combination of many bodies.</p>
+
+  <p>The algorithm implemented in this project is the <a href="https://en.wikipedia.org/wiki/Barnes%E2%80%93Hut_simulation">Barnes-Hut Algorithm</a>, which takes the size of a high-level node and the distance between a particular body and the node’s center of mass into account when determining whether to use the node’s center of mass in the calculation, rather than recursively moving into the node and performing the calculation for child nodes.</p>
+
+  <p><u>Performance Evaluation</u></p>
+
+  <p>The following table shows the average frames-per-second for the simulation run at different combinations of body-count (ranging from n=1000..10000) and threshold ratio (ranging from Ɵ=0.2..0.8). The program was built with Visual Studio 2015’s “Release” optimizing compiler and run on an Intel i7-4700MQ processor.</p>
+
+  <table border="1" cellpadding="10">
+  <tr>
+    <th></th>
+    <th>1000</th>
+    <th>2000</th>
+    <th>3000</th>
+    <th>4000</th>
+    <th>5000</th>
+    <th>6000</th>
+    <th>7000</th>
+    <th>8000</th>
+    <th>9000</th>
+    <th>10000</th>
+  </tr>
+  <tr>
+    <th>0.2</th>
+    <td>225</td>
+    <td>115</td>
+    <td>60</td>
+    <td>47</td>
+    <td>23</td>
+    <td>17</td>
+    <td>16</td>
+    <td>6</td>
+    <td>8</td>
+    <td>4</td>
+  </tr>
+  <tr>
+    <th>0.4</th>
+    <td>300</td>
+    <td>130</td>
+    <td>75</td>
+    <td>50</td>
+    <td>34</td>
+    <td>26</td>
+    <td>17</td>
+    <td>16</td>
+    <td>13</td>
+    <td>13</td>
+  </tr>
+  <tr>
+    <th>0.6</th>
+    <td>300</td>
+    <td>130</td>
+    <td>85</td>
+    <td>62</td>
+    <td>38</td>
+    <td>27</td>
+    <td>25</td>
+    <td>20</td>
+    <td>18</td>
+    <td>16</td>
+  </tr>
+  <tr>
+    <th>0.8</th>
+    <td>300<br></td>
+    <td>130</td>
+    <td>85</td>
+    <td>62</td>
+    <td>40</td>
+    <td>33</td>
+    <td>22</td>
+    <td>22</td>
+    <td>14</td>
+    <td>16</td>
+  </tr>
+</table>
+
+
+
+</body>
+
+</html>
