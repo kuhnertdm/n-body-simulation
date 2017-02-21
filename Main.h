@@ -8,6 +8,7 @@
 #define SOFTEN 0.5f
 #define CHEAT_RATIO 0.8f
 #define EPS 0.001f
+#define BLACK_HOLE_MASS 1.0f
 class Main
 {
 
