@@ -13,7 +13,14 @@
 
   <p><u>How to install and build</u></p>
 
-  <p>[Coming soon]</p>
+  <p>This project was created in Visual Studio on Windows. Import all of the .cpp and .h and .txt files into the project. All of the provided files should be placed in the project’s working directory.</p>
+
+  <p>In project properties, go to C/C++ -> General -> Additional Include Directories and include opengl-wrapper\GLFW\include and opengl-wrapper\GLEW\include.</p>
+
+  <p>Navigate to Linker -> General -> Additional Library Directories and add opengl-wrapper\GLFW\lib-vc2013 and opengl-wrapper\GLEW\lib\Release\Win32.</p>
+
+  <p>Finally, go to Linker -> Input -> Additional Dependencies and add (in this order) opengl32.lib, glew32.lib, glfw3dll.lib</p>
+
 
   <p><u>Simulation Parameters (Defined in Main.h)</u></p>
 
