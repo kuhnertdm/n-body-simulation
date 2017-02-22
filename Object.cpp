@@ -23,13 +23,22 @@ void Object::updateForces(Object *other) {
 	dist = sqrt(dist*dist + SOFTEN * SOFTEN);
 
 	if (dist < CUBE_DEM) {
-		other->isAlive = false;
-		//printf("Velocities before collide: %f %f\n", this->velocity.magnitude(), other->velocity.magnitude());
-		this->velocity = (this->velocity * this->size + other->velocity * other->size) * (1.0f / (this->size + other->size));
-		//printf("Velocity after collide: %f\n", this->velocity.magnitude());
-		this->size += other->size;
-		other->size = 0;
-		return;
+		if (this->size > other->size) {
+			other->isAlive = false;
+			//printf("Velocities before collide: %f %f\n", this->velocity.magnitude(), other->velocity.magnitude());
+			this->velocity = (this->velocity * this->size + other->velocity * other->size) * (1.0f / (this->size + other->size));
+			//printf("Velocity after collide: %f\n", this->velocity.magnitude());
+			this->size += other->size;
+			other->size = 0;
+			return;
+		}
+		else {
+			this->isAlive = false;
+			other->velocity = (this->velocity * this->size + other->velocity * other->size) * (1.0f / (this->size + other->size));
+			other->size += this->size;
+			this->size = 0;
+			return;
+		}
 	}
 	float m1 = this->size;
 	float m2 = other->size;

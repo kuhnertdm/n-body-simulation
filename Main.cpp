@@ -66,7 +66,7 @@ int main() {
 		o->velocity = vel;
 		objects.push_back(o);
 	}
-	objects.push_back(new Object(Vector3(0, 0, 0), MAX_MASS));
+	objects.push_back(new Object(Vector3(0, 0, 0), MAX_MASS*BLACK_HOLE_MASS));
 
 	initBuffers(objects, pos, size);
 
@@ -129,7 +129,7 @@ int main() {
 		SYSTEMTIME end;
 		GetSystemTime(&end);
 		if (end.wMilliseconds - start.wMilliseconds > 0 && frameMod == 0) {
-			printf("%d\n", (1000 / (end.wMilliseconds - start.wMilliseconds)));
+			printf("FPS: %d\n", (1000 / (end.wMilliseconds - start.wMilliseconds)));
 		}
 
 		frameMod++;
