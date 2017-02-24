@@ -13,19 +13,19 @@
 
   <p><u>How to install and build</u></p>
 
-  <p>This project was created in Visual Studio on Windows. Import all of the .cpp and .h and .txt files from the <a href="https://github.com/kuhnerdm/n-body-simulation">Git repo</a> into the project. All of the provided files should be placed in the project’s working directory.</p>
+  <p>This project was created in Visual Studio on Windows. Import all of the .cpp, .h, and .txt files from the <a href="https://github.com/kuhnerdm/n-body-simulation">Git repo</a> into the project. All of the provided files should be placed in the project's working directory.</p>
 
-  <p>In project properties, go to C/C++ -> General -> Additional Include Directories and include opengl-wrapper\GLFW\include and opengl-wrapper\GLEW\include.</p>
+  <p>In project properties, go to C/C++ -> General -> Additional Include Directories, and include opengl-wrapper\GLFW\include and opengl-wrapper\GLEW\include.</p>
 
-  <p>Navigate to Linker -> General -> Additional Library Directories and add opengl-wrapper\GLFW\lib-vc2013 and opengl-wrapper\GLEW\lib\Release\Win32.</p>
+  <p>Navigate to Linker -> General -> Additional Library Directories, and add opengl-wrapper\GLFW\lib-vc2013 and opengl-wrapper\GLEW\lib\Release\Win32.</p>
 
-  <p>Finally, go to Linker -> Input -> Additional Dependencies and add (in this order) opengl32.lib, glew32.lib, glfw3dll.lib</p>
+  <p>Finally, go to Linker -> Input -> Additional Dependencies, and add (in this order): opengl32.lib, glew32.lib, glfw3dll.lib</p>
 
 
   <p><u>Simulation Parameters (Defined in Main.h)</u></p>
 
   <p>NUMBER_OF_BODIES: The number of bodies in the system</p>
-  <p>CHEAT_RATIO: The value of Ɵ in the Barnes-Hut Algorithm (Explained below)</p>
+  <p>CHEAT_RATIO: The value of theta in the Barnes-Hut Algorithm (Explained below)</p>
 
   <p><u>Controls</u></p>
 
@@ -47,17 +47,50 @@
 
   <p>N-body simulations are a classic example of how poorly-scaling algorithms can be optimized through clever structuring and estimation of data. As the number of bodies (n) becomes large, the time needed to simulate the changing position of each body increases at a rate proportional to n2.</p>
 
+  <p><u>Gravitational Equation</u></p>
+
+  <p>The equation used to model gravity in our system closely follows the one used to model gravity in the real world. To determine the gravitational force applied to a body from another body, the following equation is used:</p>
+
+  <p>F = (G * m * m) / (r^2)</p>
+
+  <p>Where:</p>
+
+  <ul>
+  <li>F is the force applied to the body</li>
+  <li>G is a gravitational constant</li>
+  <li>The two m's are the masses of the bodies</li>
+  <li>r is the distance betwen the two bodies</li>
+  </ul>
+
+  <p><u>Physical Constants</p></u>
+
+  <p>Although our simulation follows the physical proportions of gravity in the real world (e.g. Force scales quadratically and inversely with distance, and linearly and directly with object mass), the limitations of the technology used 
+    to implement it required that we change constants and bounds on object size to keep the motion realistic. Following is a list of physical constants set in the Main.h file:</p>
+
+  <ul>
+  <li>MAX_MASS: The upper bound of the mass of a body in the system</li>
+  <li>G: Gravitational constant in the system</li>
+  <li>MAX_DISTANCE: The upper bound of the furthest distance between two bodies</li>
+  <li>CUBE_DEM : The distance between bodies to trigger a collision. If 0, there are no collision</li>
+  <li>BLACK_HOLE_MASS: The multiple of the mass of the body in the center. Using a very large number simulates a black hole in the center, keeping bodies relatively in the same area.</li>
+  </ul> 
+
   <p><u>Algorithm Improvements</u></p>
 
   <p>This particular implementation of the simulation improves this rate by structuring the data in a tree representing divisions of physical space. An octree is particularly useful for this purpose, as one octant of space relative to the 3D bounds of a parent node can be represented as one of the eight child nodes.</p>
 
   <p>Structuring the data in this way allows us to store center-of-mass information for each node in the tree, and therefore, to use a high-level center-of-mass to represent the combination of many bodies.</p>
 
-  <p>The algorithm implemented in this project is the <a href="https://en.wikipedia.org/wiki/Barnes%E2%80%93Hut_simulation">Barnes-Hut Algorithm</a>, which takes the size of a high-level node and the distance between a particular body and the node’s center of mass into account when determining whether to use the node’s center of mass in the calculation, rather than recursively moving into the node and performing the calculation for child nodes.</p>
+  <p>The algorithm implemented in this project is the <a href="https://en.wikipedia.org/wiki/Barnes%E2%80%93Hut_simulation">Barnes-Hut Algorithm</a>, which takes the size of a high-level node and the distance between a particular body and the node's center of mass into account when determining whether to use the node's center of mass in the calculation, rather than recursively moving into the node and performing the calculation for child nodes.</p>
+
+  <p><u>Collision Mechanics</p></u>
+
+  <p>When implementing this project, we noticed that the proportions of our physical constants was causing unrealistic behavior when objects were very close to each other. We remedied this by implementing a collision system that
+    merges two bodies into one when they get too close. The result's mass is the sum of two objects, and the result's velocity follows the rule of momentum: the momentum before and after the collision remains the same.</p>
 
   <p><u>Performance Evaluation</u></p>
 
-  <p>The following table shows the average frames-per-second for the simulation run at different combinations of body-count (ranging from n=1000..10000) and threshold ratio (ranging from Ɵ=0.2..0.8). The program was built with Visual Studio 2015’s “Release” optimizing compiler and run on an Intel i7-4700MQ processor.</p>
+  <p>The following table shows the average frames-per-second for the simulation run at different combinations of body-count (ranging from n=1000..10000) and threshold ratio (ranging from theta=0.2..0.8). The program was built with Visual Studio 2015's "Release" optimizing compiler and run on an Intel i7-4700MQ processor.</p>
 
   <table border="1" cellpadding="10">
   <tr>
